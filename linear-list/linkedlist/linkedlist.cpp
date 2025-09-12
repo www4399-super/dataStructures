@@ -7,7 +7,7 @@ class Node
 public:
     Node<T> *next;
     T val;
-    Node(T &x) : val(x), next(nullptr) {}
+    Node(T x) : val(x), next(nullptr) {}
 };
 
 template <typename T>
@@ -77,10 +77,11 @@ public:
             return;
         }
 
-        if (head->next = nullptr)
+        if (head->next == nullptr)
         {
             delete head;
             head = nullptr;
+            size--;
         }
         
         else{
@@ -111,11 +112,10 @@ public:
             return;
         }
 
-        if (head == nullptr)
+        if (i == 1)
         {
-            Node<T>* new_node = new Node(x);
-            new_node->next = head;
-            head = new_node;  
+            pushfront(x);
+            return;  
         }
         else{
             int count = 1;
@@ -143,6 +143,7 @@ public:
             Node<T>* temp = head;  // 临时保存头节点
             head = head->next;     // 更新头指针
             delete temp;
+            return;
         }
 
         int count = 1;
@@ -172,13 +173,14 @@ public:
             cur = cur->next;
             count ++;
         }
-        cur->next = x;
+        cur->val = x;
     }
 
     T getVal(int i){
         if (i<1||i>size||head == nullptr)
         {
             cout << "Node does not exist" << endl;
+            throw out_of_range("Invalid index");
         }
 
         Node<T> *cur = head;
