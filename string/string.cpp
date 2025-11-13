@@ -43,7 +43,7 @@ public:
     {
         length = s.length;
         data=new char[length+1];
-         my_strcpy(data,s.data);
+        my_strcpy(data,s.data);
     }
     ~MyString()
     {
@@ -67,34 +67,16 @@ public:
 
     vector<int> getNext(const MyString &pattern)
     {
-        if (pattern.length < 2)
-        {
-            return {0};
-        }
-        vector<int> next(pattern.length);
-        next[0] = 0;
-        next[1] = 0;
+        vector<int> next(pattern.length,0);
         int comp = 0;
-        int cur = 2;
-        while (cur < pattern.length)
-        {
-            if (pattern[cur - 1] == pattern[comp])
-            {
-                next[cur] = comp + 1;
-                cur++;
-                comp++;
+        for(int cur = 1;cur< pattern.length;cur++){
+            while(comp!=0 && pattern[cur]!=pattern[comp]){
+                comp = next[comp-1];
             }
-            else
-            {
-                if (comp > 0)
-                {
-                    comp = next[comp];
-                }
-                else
-                {
-                    next[cur++] = 0;
-                }
+            if(pattern[comp] == pattern[cur]){
+                comp ++;
             }
+            next[cur] = comp;
         }
         return next;
     }
@@ -115,7 +97,7 @@ public:
             {
                 if (pcur > 0)
                 {
-                    pcur = next[pcur];
+                    pcur = next[pcur-1];
                 }
                 else
                 {
@@ -139,8 +121,8 @@ ostream &operator<<(ostream &cout, const MyString &s)
 
 int main()
 {
-    MyString str("abcdabc");
-    MyString pattern("bc");
+    MyString str("aaaabaaab");
+    MyString pattern("aaab");
     int a = str.kmp(str,pattern);
     cout << a;
     
