@@ -37,6 +37,7 @@ public:
     ~binarytree();                  // 析构函数
     void deleteTree(node<T>*);      // 删除整棵树
     bool isMirror(node<T>*, node<T>*); // 判断两棵二叉树是否互为镜像
+    bool isMirror_non_recursive(node<T>*, node<T>*);//判断两棵二叉树是否互为镜像
 };
 
 template <class T>// 先序遍历
@@ -269,6 +270,62 @@ node<T>* binarytree<T>::copy(node<T>* root){
 template <class T>
 binarytree<T>::binarytree(const binarytree<T> &other){//拷贝构造
     root = copy(other.root);
+}
+
+template <class T>
+bool binarytree<T>::isMirror(node<T>* root1, node<T>* root2){
+    if(!root1||!root2) return false;
+    if (root1->data!=root2->data)
+    {
+        return false;
+    }
+    
+    if (root1->data==root2->data)
+    {
+        return isMirror(root1->left,root2->right) && isMirror(root1->right,root2->left);
+    }
+    
+}
+
+template <class T>
+bool  binarytree<T>::isMirror_non_recursive(node<T>* root1, node<T>* root2){//镜像非递归实现
+    queue<node<T> *>  q;
+
+    q.push(root1);
+    q.push(root2);
+
+    while (!q.empty())
+    {
+        node<T> * a = q.front();
+        q.pop();
+
+        node<T> * b = q.front();
+        q.pop();
+
+        if(a==nullptr && b==nullptr){
+            continue;
+        }
+
+        if (a == nullptr || b == nullptr) {
+            return false;
+        }
+        
+        if (a->data!=b->data)
+        {
+            return false;;
+        }
+
+        else{
+            q.push(a->left);
+            q.push(b->right);
+
+            q.push(a->right);
+            q.push(b->left);
+        }
+        
+    }
+    return true;
+    
 }
 
 template <class T>
